@@ -123,12 +123,10 @@ public class Student extends Human implements Comparable{
 	// и т. д.).
 	@Override
 	public int compareTo(Object o) {
-		if (this == null && o == null)
-			return 0;
-		if (this == null && o != null)
-			return 1;
-		if (this != null && o == null)
-			return -1;
+		/*
+		 * if (this == null && o == null) return 0; if (this == null && o !=
+		 * null) return 1; if (this != null && o == null) return -1;
+		 */
 		Student st = (Student) o;
 
 		switch (Group.getSortWay()) {

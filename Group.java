@@ -21,13 +21,11 @@ public class Group implements Reservist {
 	// групі
 	private Student[] group = new Student[10]; // array Student = масив судентів
 	private static int sortWay; // way of sorting = шлях сортування
+	// parameter of sorting = параметр сортування
 	private static String[] sortParam = { "0.unsorted ", "1.secondName ",
-			"2.firstName ", "3.age ", "4.recordNumber " }; // parameter of
+			"2.firstName ", "3.age ", "4.recordNumber " }; 
 
-	// sorting =
-	// параметр
-	// сортування
-
+	
 	/* constructors = конструктори */
 	public Group() {
 		super();
