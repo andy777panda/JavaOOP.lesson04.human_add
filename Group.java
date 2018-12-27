@@ -23,9 +23,10 @@ public class Group implements Reservist {
 	private static int sortWay; // way of sorting = шлях сортування
 	private static String[] sortParam = { "0.unsorted ", "1.secondName ",
 			"2.firstName ", "3.age ", "4.recordNumber " }; // parameter of
-															// sorting =
-															// параметр
-															// сортування
+
+	// sorting =
+	// параметр
+	// сортування
 
 	/* constructors = конструктори */
 	public Group() {
@@ -117,15 +118,24 @@ public class Group implements Reservist {
 	 * @return String value.
 	 * @author ap
 	 */
-	/*
-	 * public String getSortGroup(int az) { String[] sts = new
-	 * String[group.length]; String resStr = ""; for (int i = 0; i <
-	 * group.length; i++) { try { sts[i] = group[i].toString(); } catch
-	 * (NullPointerException e) { sts[i] = ""; } } sts = AP.sortArray(sts, az);
-	 * for (int i = 0; i < sts.length; i++) { if (sts[i] != "") resStr += "\n" +
-	 * sts[i]; } return "Sorted " + AP.direction(az) + "\t Group [" + groupName
-	 * + " #" + groupNumber + "] consists of such students:" + resStr; }
-	 */
+	public String getStSortGroup(int az) {
+		String[] sts = new String[group.length];
+		String resStr = "";
+		for (int i = 0; i < group.length; i++) {
+			try {
+				sts[i] = group[i].toString();
+			} catch (NullPointerException e) {
+				sts[i] = "";
+			}
+		}
+		sts = AP.sortArrayString(sts, az);
+		for (int i = 0; i < sts.length; i++) {
+			if (sts[i] != "")
+				resStr += "\n" + sts[i];
+		}
+		return "Sorted " + AP.direction(az) + "\t Group [" + groupName + " #"
+				+ groupNumber + "] consists of such students:" + resStr;
+	}
 
 	/**
 	 * Get string-line sorted elemets of group (array of Students) = метод
@@ -140,10 +150,10 @@ public class Group implements Reservist {
 	public Group getSortGroup(int sortWay) {
 		// Arrays.sort(group, Comparator.nullsLast(Student::compareTo));
 		// Arrays.sort(group, Collections.reverseOrder());
-		// Student.setSortWay(sortWay);
 		Group.sortWay = sortWay;
+		AP.sortArrayStudentNulls(group);
 		try {
-			Arrays.sort(group);
+			Arrays.sort(group, 0, count);
 		} catch (NullPointerException e) {
 			System.out.println(e);
 		}
@@ -180,6 +190,7 @@ public class Group implements Reservist {
 		for (int i = 0; i < group.length; i++) {
 			if (group[i] == null) {
 				group[i] = st;
+				count++;
 				add = true;
 				break;
 			}
@@ -302,7 +313,7 @@ public class Group implements Reservist {
 		Student[] res = new Student[0];// result array == масив результатів
 		for (Student st : this.group) {
 			if (st != null) {
-				if (st.isSex() && st.getAge() > 18) {
+				if (st.isSex() && st.getAge() > RESERVIST_AGE) {
 					res = AP.resize(res, 1);
 					res[res.length - 1] = st;
 				}
@@ -310,5 +321,4 @@ public class Group implements Reservist {
 		}
 		return res;
 	}
-
 }

@@ -5,5 +5,7 @@ package net.ukr.andy777;
  */
 
 public interface Reservist {
+	public static int RESERVIST_AGE=18;
+	
 	public Student[] getReservistList();
 }

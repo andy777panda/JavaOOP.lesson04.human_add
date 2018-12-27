@@ -12,7 +12,6 @@ import java.util.Arrays;
  В случае попытки добавления 11го студента создать собственное исключение и обработать его.
  Определить метод toString() для группы так, чтобы он выводил список студентов в алфавитном порядке.
  4. Нарисовать UML диаграмму проекта.
-
  Lesson04
  1. Усовершенствуйте класс Group, добавив возможность интерактивного добавления объекта.
  2. Реализуйте возможность сортировки списка студентов по фамилии.
@@ -34,7 +33,7 @@ public class Main {
 			gr1.tcAddStudentToGroup(AP.scInputStudent(AP.scInputHuman(17, 23),
 					20, 1, 6));
 
-		for (int i = 0; i < 12; i++)
+		for (int i = 0; i < 8; i++)
 			// add a few random students = додавання кількох випадкових
 			// студентів
 			gr1.tcAddStudentToGroup(AP.rndStudent(17, 23, AP.rndBoolean(), 20,
@@ -57,52 +56,35 @@ public class Main {
 		// output array reservists = вивід масиву резервістів
 		System.out.println("ReservistList:");
 		int i = 0;
-		for (Student st: gr1.getReservistList()) {
+		if (gr1.getReservistList().length == 0)
+			System.out.println("NO reservists in Group");
+		for (Student st : gr1.getReservistList()) {
 			System.out.println(++i + ". " + st);
 		}
-	
 
-	
-// з попереднього завдання Lesson03
-/*	
-		// remove students from group = виключення студентів з групи
-		for (int i = 0; i < 3; i++) {
-			// особа на випадковій позиції у списку групи
-			gr1.tcRemoveStudentFromGroup(gr1.getGroup()[AP.rndInteger(0, 9)]);
-
-			// випадкова особа з випадковим номером заліковки
-			gr1.tcRemoveStudentFromGroup(AP.rndStudent(17, 23, AP.rndBoolean(),
-					20));
-
-			// не визначена особа
-			gr1.tcRemoveStudentFromGroup(null);
-		}
-		System.out.println();
-		System.out.println(gr1 + "\n");
-
-		// Add students to group = додавання студентів до групи
-		for (int i = 0; i < 5; i++)
-			gr1.tcAddStudentToGroup(AP.rndStudent(17, 23, AP.rndBoolean(), 20));
-		System.out.println();
-		System.out.println(gr1 + "\n");
-
-		// Finding a student by second name = метод пошуку студента за прізвищем
-		for (int i = 0; i < 10; i++) {
-			Student[] sts = gr1.findSecondName(AP.setSecondNameRnd(AP
-					.rndBoolean()));
-			Group gr2 = new Group("findGroup2", "678/90", sts);
-			// знайдені студенти відсортовані за зростанням
-			System.out.println(gr2.getSortGroup(1) + "\n");
-		}
-
-		// AZ-sort = сортування переліку зростанням
-		System.out.println(gr1.getSortGroup(1) + "\n");
-		// ZA-sort = сортування переліку спаданням
-		System.out.println(gr1.getSortGroup(-1) + "\n");
-		// unsorted = не сортований перелік
-		System.out.println(gr1.getSortGroup(0) + "\n");
-		// original = оригінальна база
-		System.out.println(gr1 + "\n");
-	*/
+		// з попереднього завдання Lesson03
+		/*
+		 * // remove students from group = виключення студентів з групи for (int
+		 * i = 0; i < 3; i++) { // особа на випадковій позиції у списку групи
+		 * gr1.tcRemoveStudentFromGroup(gr1.getGroup()[AP.rndInteger(0, 9)]); //
+		 * випадкова особа з випадковим номером заліковки
+		 * gr1.tcRemoveStudentFromGroup(AP.rndStudent(17, 23, AP.rndBoolean(),
+		 * 20)); // не визначена особа gr1.tcRemoveStudentFromGroup(null); }
+		 * System.out.println(); System.out.println(gr1 + "\n"); // Add students
+		 * to group = додавання студентів до групи for (int i = 0; i < 5; i++)
+		 * gr1.tcAddStudentToGroup(AP.rndStudent(17, 23, AP.rndBoolean(), 20));
+		 * System.out.println(); System.out.println(gr1 + "\n"); // Finding a
+		 * student by second name = метод пошуку студента за прізвищем for (int
+		 * i = 0; i < 10; i++) { Student[] sts =
+		 * gr1.findSecondName(AP.setSecondNameRnd(AP .rndBoolean())); Group gr2
+		 * = new Group("findGroup2", "678/90", sts); // знайдені студенти
+		 * відсортовані за зростанням System.out.println(gr2.getStSortGroup(1) +
+		 * "\n"); } // AZ-sort = сортування переліку зростанням
+		 * System.out.println(gr1.getStSortGroup(1) + "\n"); // ZA-sort =
+		 * сортування переліку спаданням
+		 * System.out.println(gr1.getStSortGroup(-1) + "\n"); // unsorted = не
+		 * сортований перелік System.out.println(gr1.getStSortGroup(0) + "\n");
+		 * // original = оригінальна база System.out.println(gr1 + "\n");
+		 */
 	}
 }

@@ -94,7 +94,7 @@ public class AP {
 	 * @return String[] sorted array.
 	 * @author ap
 	 */
-	public static String[] sortArray(String[] arr, int az) {
+	public static String[] sortArrayString(String[] arr, int az) {
 		boolean isSorted = false;
 		while (!isSorted) {
 			isSorted = true;
@@ -102,6 +102,31 @@ public class AP {
 				if (arr[i].compareToIgnoreCase(arr[i + 1]) * az > 0) {
 					isSorted = false;
 					arr = swapArrElem(arr, i, i + 1);
+				}
+			}
+		}
+		return arr;
+	}
+
+	/**
+	 * Bubble sort nulls to the end of Student array = метод бульбашкового
+	 * сортування null'ів в кінець Student-масиву
+	 * 
+	 * @param arr
+	 *            <code>Student[]</code> array for sorting
+	 * @return Student[] sorted array.
+	 * @author ap
+	 */
+	public static Student[] sortArrayStudentNulls(Student[] arr) {
+		boolean isSorted = false;
+		while (!isSorted) {
+			isSorted = true;
+			for (int i = 0; i < arr.length - 1; i++) {
+				if (arr[i] == null && arr[i + 1] != null) {
+					isSorted = false;
+					Student temp = arr[i];
+					arr[i] = arr[i + 1];
+					arr[i + 1] = temp;
 				}
 			}
 		}
