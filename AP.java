@@ -44,6 +44,8 @@ public class AP {
 	 *            <code>int</code> minimum integer value of range
 	 * @param b
 	 *            <code>int</code> maximum integer value of range
+	 * @param msg
+	 *            <code>String</code> adding info-message
 	 * @return int value.
 	 * @author ap
 	 */

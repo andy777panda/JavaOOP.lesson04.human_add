@@ -1,6 +1,7 @@
 package net.ukr.andy777;
 
 import java.util.Arrays;
+import java.util.Comparator;
 
 /*
  Lesson03
@@ -23,9 +24,8 @@ public class Group implements Reservist {
 	private static int sortWay; // way of sorting = шлях сортування
 	// parameter of sorting = параметр сортування
 	private static String[] sortParam = { "0.unsorted ", "1.secondName ",
-			"2.firstName ", "3.age ", "4.recordNumber " }; 
+			"2.firstName ", "3.age ", "4.recordNumber " };
 
-	
 	/* constructors = конструктори */
 	public Group() {
 		super();
@@ -146,14 +146,20 @@ public class Group implements Reservist {
 	 * @author ap
 	 */
 	public Group getSortGroup(int sortWay) {
-		// Arrays.sort(group, Comparator.nullsLast(Student::compareTo));
-		// Arrays.sort(group, Collections.reverseOrder());
 		Group.sortWay = sortWay;
-		AP.sortArrayStudentNulls(group);
-		try {
-			Arrays.sort(group, 0, count);
-		} catch (NullPointerException e) {
-			System.out.println(e);
+
+		int jdk = AP.inputIntegerDialog(1, 2, "(1=sortByJDK1.6;   2=sortByJDK1.8)");
+		if (jdk == 1) {
+			AP.sortArrayStudentNulls(group);
+			try {
+				Arrays.sort(group, 0, count);
+			} catch (NullPointerException e) {
+				System.out.println(e);
+			}
+		}
+		if (jdk == 2) {
+//jdk1.8
+			Arrays.sort(group, Comparator.nullsLast(Student::compareTo));
 		}
 		return this;
 	}
