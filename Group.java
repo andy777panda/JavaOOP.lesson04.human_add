@@ -1,5 +1,6 @@
 package net.ukr.andy777;
 
+import java.io.*;
 import java.util.Arrays;
 import java.util.Comparator;
 
@@ -13,6 +14,10 @@ import java.util.Comparator;
  Lesson04
  2. Реализуйте возможность сортировки списка студентов по фамилии.
  3. Реализуйте возможность сортировки по параметру (Фамилия, успеваемость и т. д.).
+
+ Lesson05
+ 3. Усовершенствуйте класс, описывающий группу студентов, добавив возможность сохранения группы в файл.
+ 4. Реализовать обратный процесс. Т.е. считать данные о группе из файла, и на их основе создать объект типа группа.
  */
 
 public class Group implements Reservist {
@@ -136,19 +141,19 @@ public class Group implements Reservist {
 	}
 
 	/**
-	 * Get string-line sorted elemets of group (array of Students) = метод
-	 * отримання строкового рядка відсортованих елементів групи (масиву
-	 * студентів)
+	 * Get sorted elemets of group (array of Students) = метод отримання
+	 * відсортованих елементів групи (масиву студентів)
 	 * 
 	 * @param az
 	 *            <code>int</code> sort direction (+0=AZ; -0=ZA; 0=unsort)
-	 * @return String value.
+	 * @return Group value.
 	 * @author ap
 	 */
 	public Group getSortGroup(int sortWay) {
 		Group.sortWay = sortWay;
 
-		int jdk = AP.inputIntegerDialog(1, 2, "(1=sortByJDK1.6;   2=sortByJDK1.8)");
+		int jdk = AP.inputIntegerDialog(1, 2,
+				"(1=sortByJDK1.6;   2=sortByJDK1.8)");
 		if (jdk == 1) {
 			AP.sortArrayStudentNulls(group);
 			try {
@@ -158,8 +163,8 @@ public class Group implements Reservist {
 			}
 		}
 		if (jdk == 2) {
-//jdk1.8
-			Arrays.sort(group, Comparator.nullsLast(Student::compareTo));
+			// jdk1.8
+			// Arrays.sort(group, Comparator.nullsLast(Student::compareTo));
 		}
 		return this;
 	}
@@ -313,6 +318,13 @@ public class Group implements Reservist {
 	// Lesson04
 	// 4. Реализуйте интерфейс Военком, который вернет из группы массив
 	// студентов - юношей, которым больше 18 лет.
+	/**
+	 * Get list of Students of Group who meet the conditions reservists = метод
+	 * отримання переліку Студентів Групи, які відповідають умові військомату
+	 * 
+	 * @return array of Students
+	 * @author ap
+	 */
 	public Student[] getReservistList() {
 		Student[] res = new Student[0];// result array == масив результатів
 		for (Student st : this.group) {
@@ -325,4 +337,61 @@ public class Group implements Reservist {
 		}
 		return res;
 	}
+
+	// Lesson05
+	// 3. Усовершенствуйте класс, описывающий группу студентов, добавив
+	// возможность сохранения группы в файл.
+	/**
+	 * Save Group to file in TSV-format = метод запису до файлу Групи у
+	 * TSV-форматі
+	 * 
+	 * @param fileName
+	 *            <code>String</code> full name of file to save Group
+	 * @author ap
+	 */
+	public void saveGroupToFile(String fileName) {
+		// get Group by String = отримання Групи в Строковому виді
+		String resStr = "";
+		resStr = groupName + "\t" + groupNumber;
+		resStr += "\n" + "# order" + "\t" + "SecondName" + "\t" + "FirstName"
+				+ "\t" + "MiddleName" + "\t" + "Age" + "\t" + "Sex" + "\t"
+				+ "# Record" + "\t" + "HighSchool" + "\t" + "YearStudy";
+		int i = 0;
+		for (Student st : group) {
+			if (st == null)
+				++i;
+			else
+				resStr += "\n" + ++i + "\t" + st.getSecondName() + "\t"
+						+ st.getFirstName() + "\t" + st.getMiddleName() + "\t"
+						+ st.getAge() + "\t" + (st.isSex() ? "male" : "female")
+						+ "\t" + st.getRecordNumber() + "\t"
+						+ st.getHighSchool() + "\t" + st.getYearStudy();
+		}
+
+		// save Group to file = запис групи до файлу
+
+		// jdk1.7
+		// try(PrintWriter pw = new PrintWriter(new File(fileName)){
+		// pw.print(resStr);
+		// } catch (FileNotFoundException e) {
+		// System.out.println("Error found file" + fileName);
+		// }
+
+		// jdk1.6
+		PrintWriter pw = null;
+		try {
+			pw = new PrintWriter(new File(fileName));
+			pw.print(resStr);
+		} catch (FileNotFoundException e) {
+			System.out.println("Error found file" + fileName);
+		} finally {
+			pw.close();
+		}
+
+	}
+
+	// Lesson05
+	// 4. Реализовать обратный процесс. Т.е. считать данные о группе из файла, и
+	// на их основе создать объект типа группа.
+
 }
