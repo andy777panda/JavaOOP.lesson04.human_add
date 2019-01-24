@@ -2,6 +2,8 @@ package net.ukr.andy777;
 
 import javax.swing.JOptionPane;
 import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
 
 /*
@@ -492,4 +494,55 @@ public class AP {
 			return -1;
 		return 0;
 	}
+
+	// Lesson05. 4. Реализовать обратный процесс. Т.е. считать данные о группе
+	// из файла, и на их основе создать объект типа группа.
+
+	// splitting a text file into words = розбивка текстового файлу на слова
+	/**
+	 * Method split a sign-separated text file into words = Метод розбивка
+	 * текстового файлу з роділювачами на слова
+	 * 
+	 * @param filename
+	 *            <code>String</code> file's name to read data
+	 * @param separator
+	 *            <code>String</code> file's sign-separator of values
+	 * @return String array of data's elements.
+	 * @author ap
+	 */
+	public static String[] wordsOfTextFile(String filename, String separator) {
+		String[] res = new String[0];
+		try {
+			String str = null;
+			BufferedReader br = new BufferedReader(new FileReader(filename));
+			while ((str = br.readLine()) != null) {
+				res = expandArray(res, str.split(separator));
+			}
+			br.close();
+		} catch (IOException e) {
+			System.out.println("Error open file - " + filename);
+		}
+		return res;
+	}
+
+	// expanding String-array of additional array = розширення строкового масиву
+	// додатковим масивом
+	/**
+	 * Method expand String-array of additional array = Метод розширення
+	 * строкового масиву додатковим масивом
+	 * 
+	 * @param orig
+	 *            <code>String[]</code> original array
+	 * @param add
+	 *            <code>String[]</code> adding array
+	 * @return String array (orig+add)
+	 * @author ap
+	 */
+	public static String[] expandArray(String[] orig, String[] add) {
+		String[] res = new String[orig.length + add.length];
+		System.arraycopy(orig, 0, res, 0, orig.length);
+		System.arraycopy(add, 0, res, orig.length, add.length);
+		return res;
+	}
+
 }

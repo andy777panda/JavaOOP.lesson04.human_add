@@ -393,5 +393,25 @@ public class Group implements Reservist {
 	// Lesson05
 	// 4. Реализовать обратный процесс. Т.е. считать данные о группе из файла, и
 	// на их основе создать объект типа группа.
+	public Group readFileToGroup(String fileName, String separator) {
+		// split a text file into words by separator = розбивка текстового
+		// файлу на слова розділювачем
+		String[] wtf = AP.wordsOfTextFile("group.csv", "\t");
 
+		this.setGroupName(wtf[0]);
+		this.setGroupNumber(wtf[1]);
+		int q = 9; // number of Student elemets = кількість елементів
+		// характеристики студента
+		if (wtf.length == 2 + q)
+			return this;
+		for (int i = 1; i < (wtf.length - 2) / q; i++) {
+			this.group[Integer.parseInt(wtf[i * q + 2 + 0])-1] = new Student(
+					wtf[i * q + 2 + 1], wtf[i * q + 2 + 2], wtf[i * q + 2 + 3],
+					Integer.parseInt(wtf[i * q + 2 + 4]), ((wtf[i * q + 2 + 5]
+							.equals("male")) ? true : false), Integer
+							.parseInt(wtf[i * q + 2 + 6]), wtf[i * q + 2 + 7],
+					Integer.parseInt(wtf[i * q + 2 + 8]));
+		}
+		return this;
+	}
 }

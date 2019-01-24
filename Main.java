@@ -29,21 +29,37 @@ public class Main {
 		Group gr1 = new Group("Group1", "123/45");
 
 		// initializing array of students = ініціалізація переліку студентів
-//		int q = AP.inputIntegerDialog(0, 12,
-//		"amount of students for fist user-initializing");
-//		for (int i = 0; i < q; i++)
-//			// ручне введення кожного
-//			gr1.tcAddStudentToGroup(AP.scInputStudent(AP.scInputHuman(17, 23),
-//					20, 1, 6));
+		// int q = AP.inputIntegerDialog(0, 12,
+		// "amount of students for fist user-initializing");
+		// for (int i = 0; i < q; i++)
+		// // ручне введення кожного
+		// gr1.tcAddStudentToGroup(AP.scInputStudent(AP.scInputHuman(17, 23),
+		// 20, 1, 6));
 
+		System.out.println("== автоматичне випадкове наповнення групи");
 		for (int i = 0; i < AP.rndInteger(0, 10); i++)
 			// add a few random students = додавання кількох випадкових
 			// студентів
 			gr1.tcAddStudentToGroup(AP.rndStudent(17, 23, AP.rndBoolean(), 20,
 					1, 6));
+
+		gr1.tcRemoveStudentFromGroup(gr1.getGroup()[AP.rndInteger(0, 1)]);
 		System.out.println();
 		System.out.println(gr1 + "\n");
+
+		System.out.println("== запис групи до файлу");
 		gr1.saveGroupToFile("group.csv");
+
+		System.out.println("\n" + "== формування групи з зовнішного файлу");
+		Group gr2 = new Group();
+		gr2.readFileToGroup("group.csv", "\t");
+
+		System.out.println("\n"
+				+ "== перевірка сформованої групи з прочитаного файлу");
+		System.out.println(gr2 + "\n");
+
+		System.out.println("== запис нової групи до файлу");
+		gr2.saveGroupToFile("groupCopy.csv");
 
 		// з попереднього завдання Lesson03
 		// // remove students from group = виключення студентів з групи
