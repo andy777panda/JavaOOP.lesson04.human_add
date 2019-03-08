@@ -21,13 +21,60 @@ import java.util.Arrays;
  Lesson05
  3. Усовершенствуйте класс, описывающий группу студентов, добавив возможность сохранения группы в файл.
  4. Реализовать обратный процесс. Т.е. считать данные о группе из файла, и на их основе создать объект типа группа.
+ Lesson08
+ 1. Используя стандартные методы сериализации создайте мини-базу данных для работы с группами студентов 
+ (возможность записи и чтения базы из файла по запросу пользователя).
  */
 
 public class Main {
 	public static void main(String[] args) {
 
-		Group gr1 = new Group("Group1", "123/45");
+		Faculty fc1 = new Faculty("IT-faculty", "fc.001");
+		Group[] grFc = new Group[11]; // додаткова група для контролю
+		// переповнення факультету
+		System.out
+				.println("== автоматичне формування груп випадкових студентів");
+		for (int i = 0; i < grFc.length; i++) {
+			// initializing a Group with a name and number = ініціалізація Групи
+			// з ім'ям та номером
+			grFc[i] = new Group("Group" + (i + 1), (i + 1) * 111 + "/"
+					+ (i + 1) * 11);
 
+			// automatic filling a random group of students of one higher school
+			// = автоматичне випадкове наповнення групи студентами одного вузу;
+			for (int s = 0; s < AP.rndInteger(5, 11); s++)
+				grFc[i].tcAddStudentToGroup(AP.rndStudentHS(17, 23, AP
+						.rndBoolean(), 100, (i / 2 + 1), (i / 2 + 1), "КПІ"));
+
+			// adding a group to the faculty = додавання групи до факультету
+			fc1.tcAddGroupToFaculty(grFc[i]);
+
+			// print general faculty = друк загального складу факультету
+			System.out.println("======>> " + "\t" + fc1.toStringNIC() + "\n\n");
+		}
+
+		System.out.println("=== груповий склад факультету ====================\n" + fc1.toStringGs() + "\n");
+
+		// remove randome group from faculty = видалення випадкової групи з
+		// факультету
+		System.out.println("=== видалення випадкової групи з факультету");
+		fc1.tcRemoveGroupFromFaculty(fc1.getFaculty()[AP.rndInteger(0, fc1
+				.getFaculty().length)]);
+		System.out.println(fc1.toStringGs() + "\n");
+
+		System.out.println("=== serializable-запис факультету до файлу");
+		fc1.saveFacultyToFile(fc1.getFacultyName());
+
+		System.out.println("\n"
+				+ "=== формування факультету з зовнішного serializable-файлу");
+		Faculty fc2 = new Faculty().readFileToFaculty(fc1.getFacultyName());
+
+		System.out.println("\n=== перевірка зчитаного факультету з прочитаного "
+				+ "serializable-файлу");
+		System.out.println(fc2.toStringGs() + "\n");
+
+		// // з попередніх завдань Lesson03,04,05
+		// Group gr1 = new Group("Group1", "123/45");
 		// initializing array of students = ініціалізація переліку студентів
 		// int q = AP.inputIntegerDialog(0, 12,
 		// "amount of students for fist user-initializing");
@@ -36,32 +83,32 @@ public class Main {
 		// gr1.tcAddStudentToGroup(AP.scInputStudent(AP.scInputHuman(17, 23),
 		// 20, 1, 6));
 
-		System.out.println("== автоматичне випадкове наповнення групи");
-		for (int i = 0; i < AP.rndInteger(0, 10); i++)
-			// add a few random students = додавання кількох випадкових
-			// студентів
-			gr1.tcAddStudentToGroup(AP.rndStudent(17, 23, AP.rndBoolean(), 20,
-					1, 6));
+		// System.out.println("== автоматичне випадкове наповнення групи");
+		// for (int i = 0; i < AP.rndInteger(0, 10); i++)
+		// // add a few random students = додавання кількох випадкових студентів
+		// gr1.tcAddStudentToGroup(AP.rndStudent(17, 23, AP.rndBoolean(), 20, 1,
+		// 6));
+		//
+		// gr1.tcRemoveStudentFromGroup(gr1.getGroup()[AP.rndInteger(0, 1)]);
+		// System.out.println();
+		// System.out.println(gr1 + "\n");
 
-		gr1.tcRemoveStudentFromGroup(gr1.getGroup()[AP.rndInteger(0, 1)]);
-		System.out.println();
-		System.out.println(gr1 + "\n");
+		// // з попереднього завдання Lesson05
+		// System.out.println("== запис групи до файлу");
+		// gr1.saveGroupToFile("group.csv");
+		//
+		// System.out.println("\n" + "== формування групи з зовнішного файлу");
+		// Group gr2 = new Group();
+		// gr2.readFileToGroup("group.csv", "\t");
+		//
+		// System.out.println("\n"
+		// + "== перевірка сформованої групи з прочитаного файлу");
+		// System.out.println(gr2 + "\n");
+		//
+		// System.out.println("== запис нової групи до файлу");
+		// gr2.saveGroupToFile("groupCopy.csv");
 
-		System.out.println("== запис групи до файлу");
-		gr1.saveGroupToFile("group.csv");
-
-		System.out.println("\n" + "== формування групи з зовнішного файлу");
-		Group gr2 = new Group();
-		gr2.readFileToGroup("group.csv", "\t");
-
-		System.out.println("\n"
-				+ "== перевірка сформованої групи з прочитаного файлу");
-		System.out.println(gr2 + "\n");
-
-		System.out.println("== запис нової групи до файлу");
-		gr2.saveGroupToFile("groupCopy.csv");
-
-		// з попереднього завдання Lesson03
+		// // з попереднього завдання Lesson03
 		// // remove students from group = виключення студентів з групи
 		// for (int i = 0; i < 3; i++) {
 		// // особа на випадковій позиції у списку групи
@@ -102,7 +149,7 @@ public class Main {
 		// // original = оригінальна база
 		// System.out.println(gr1 + "\n");
 
-		// Lesson04
+		// // з попереднього завдання Lesson04
 		// // sort by the input parameter = сортування за введеним параметром
 		// int sortWay = AP.inputIntegerDialog(-4, 4, "way of sorting: \n"
 		// + "[POSITIVE(>0)=ascending(aZ,123);"
@@ -113,7 +160,7 @@ public class Main {
 		// + AP.direction(sortSign) + "\t" + gr1.getSortGroup(sortWay)
 		// + "\n");
 		//
-		// // Lesson04
+		// // з попереднього завдання Lesson04
 		// // output array reservists = вивід масиву резервістів
 		// System.out.println("ReservistList:");
 		// int i = 0;

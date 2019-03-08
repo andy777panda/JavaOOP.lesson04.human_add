@@ -293,6 +293,35 @@ public class AP {
 	}
 
 	/**
+	 * Method randomize initialazation of new Student element (except for the
+	 * specified HighScool) depending of age range, sex and grade range = Метод
+	 * ініціалізації нового елементу класу Student (окрім вказаного вузу) в
+	 * залежності від діапазону віку, статі та діапазону року навчання.
+	 * 
+	 * @param a1
+	 *            <code>int</code> minimum age of student
+	 * @param a2
+	 *            <code>int</code> maximum age of student
+	 * @param sex
+	 *            <code>boolean</code> sex of student
+	 * @param maxR
+	 *            <code>int</code> maximum record number
+	 * @param g1
+	 *            <code>int</code> minimum grade of student
+	 * @param g2
+	 *            <code>int</code> maximum grade of student
+	 * @param highSchool
+	 *            <code>String</code> name of higher school
+	 * @return Student element.
+	 * @author ap
+	 */
+	public static Student rndStudentHS(int a1, int a2, boolean sex, int maxR,
+			int g1, int g2, String highSchool) {
+		return new Student(rndHuman(a1, a2, sex), rndInteger(1, maxR),
+				highSchool, rndInteger(g1, g2));
+	}
+
+	/**
 	 * Method randomize initialazation of new Student element depending of age
 	 * range, sex and grade range = Метод ініціалізації нового елементу класу
 	 * Student в залежності від діапазону віку, статі та діапазону року

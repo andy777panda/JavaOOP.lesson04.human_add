@@ -1,5 +1,7 @@
 package net.ukr.andy777;
 
+import java.io.Serializable;
+
 /*
  Lesson03
  2. На основе класса Человек/Human создать класс Студент/Student. И переопределить метод вывода информации.
@@ -9,7 +11,7 @@ package net.ukr.andy777;
  3. Реализуйте возможность сортировки по параметру (Фамилия, успеваемость и т. д.).
  */
 
-public class Student extends Human implements Comparable{
+public class Student extends Human implements Comparable, Serializable {
 
 	// protected Human human; // екземпляр класу Human
 	protected int recordNumber; // record number = номер заліковки
@@ -90,7 +92,7 @@ public class Student extends Human implements Comparable{
 				+ highSchool + ", grade-" + yearStudy + "]";
 	}
 
-	public String toStringR() {
+	public String toStringSFMnSRn() {
 		return "Student [" + secondName + " " + firstName + " " + middleName
 				+ " (" + age + "-years, " + (sex ? "male" : "female")
 				+ ") recordNumber-" + recordNumber + "]";

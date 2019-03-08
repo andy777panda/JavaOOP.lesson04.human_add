@@ -2,7 +2,6 @@ package net.ukr.andy777;
 
 import java.io.*;
 import java.util.Arrays;
-import java.util.Comparator;
 
 /*
  Lesson03
@@ -19,13 +18,11 @@ import java.util.Comparator;
  3. Усовершенствуйте класс, описывающий группу студентов, добавив возможность сохранения группы в файл.
  4. Реализовать обратный процесс. Т.е. считать данные о группе из файла, и на их основе создать объект типа группа.
  */
-
-public class Group implements Reservist {
+public class Group implements Reservist, Serializable {
 	private String groupName; // group name = назва групи
 	private String groupNumber; // group number = номер групи
-	private int count; // amount of students in group = кількість студентів в
-	// групі
-	private Student[] group = new Student[10]; // array Student = масив судентів
+	private int count; // amount of students in group = кількість студентів в групі
+	private Student[] group = new Student[10]; // array Student[] = масив судентів
 	private static int sortWay; // way of sorting = шлях сортування
 	// parameter of sorting = параметр сортування
 	private static String[] sortParam = { "0.unsorted ", "1.secondName ",
@@ -102,13 +99,19 @@ public class Group implements Reservist {
 	}
 
 	// toString method = метод виводу інформації про екземпляр класу Group
+	@Override
 	public String toString() {
 		String resStr = "";
 		int i = 0;
 		for (Student st : group)
 			resStr += "\n" + ++i + ". " + st;
 		return "Group [" + groupName + " #" + groupNumber
-				+ "] consists of such students:" + resStr;
+				+ "] consists of such " + this.count + " students:" + resStr;
+	}
+
+	public String toStringNNC() {
+		return "Group [" + groupName + " #" + groupNumber
+				+ ", Number of students: " + this.count + "]";
 	}
 
 	/**
@@ -393,6 +396,16 @@ public class Group implements Reservist {
 	// Lesson05
 	// 4. Реализовать обратный процесс. Т.е. считать данные о группе из файла, и
 	// на их основе создать объект типа группа.
+	/**
+	 * Read File in TSV-format to Group = метод читання файлу у TSV-форматі до
+	 * Групи
+	 * 
+	 * @param fileName
+	 *            <code>String</code> full name of file to save Group
+	 * @param separator
+	 *            <code>String</code> separator to split a text file into words
+	 * @author ap
+	 */
 	public Group readFileToGroup(String fileName, String separator) {
 		// split a text file into words by separator = розбивка текстового
 		// файлу на слова розділювачем
@@ -405,7 +418,7 @@ public class Group implements Reservist {
 		if (wtf.length == 2 + q)
 			return this;
 		for (int i = 1; i < (wtf.length - 2) / q; i++) {
-			this.group[Integer.parseInt(wtf[i * q + 2 + 0])-1] = new Student(
+			this.group[Integer.parseInt(wtf[i * q + 2 + 0]) - 1] = new Student(
 					wtf[i * q + 2 + 1], wtf[i * q + 2 + 2], wtf[i * q + 2 + 3],
 					Integer.parseInt(wtf[i * q + 2 + 4]), ((wtf[i * q + 2 + 5]
 							.equals("male")) ? true : false), Integer

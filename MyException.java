@@ -24,6 +24,18 @@ public class MyException extends Exception {
 			res = "3. same recordNumber is in group's student = "
 					+ "аналогічний однаковий номер заліковки вже є у студента групи ";
 			break;
+		case 4:
+			res = "4. same groupNumber is on faculty's group = "
+					+ "аналогічний однаковий номер групи вже є у групи на факультеті";
+			break;
+		case 5:
+			res = "5. faculty is full, NO PLACES = факультет заповнено, немає місць для групи ";
+			break;
+		case 6:
+			res = "6. group NOT SPECIFIED OR place on the faculty is NOT OCCUPIED = "
+					+ "групу не зазначено АБО місце на факультеті НЕ ЗАЙНЯТЕ ";
+			break;
+
 		default:
 			res = "indescribable exception = неописане виключення";
 			break;

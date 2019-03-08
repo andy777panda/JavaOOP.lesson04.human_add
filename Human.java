@@ -1,11 +1,13 @@
 package net.ukr.andy777;
 
+import java.io.Serializable;
+
 /*
  1. Создать класс Человек/Human, описывающий человека (Ф.,И.,О., возраст, пол)
  Создать метод, выводящий информацию о человеке.
  */
 
-public class Human {
+public class Human implements Serializable {
 
 	protected String secondName; // surname = прізвище
 	protected String firstName; // name = ім'я
@@ -76,6 +78,7 @@ public class Human {
 	}
 
 	// toString method = метод виводу інформації про екземпляр класу Human
+	@Override
 	public String toString() {
 		return "Human [" + secondName + " " + firstName + " " + middleName
 				+ " (" + age + "-years, " + (sex ? "male" : "female") + ")]";
