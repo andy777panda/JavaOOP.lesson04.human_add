@@ -1,6 +1,8 @@
 package net.ukr.andy777;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /*
  Lesson08
@@ -13,9 +15,10 @@ public class Faculty implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private String facultyName; // faculty name = назва факультету
 	private String facultyId; // faculty Id = ід-номер факультету
-	private Group[] faculty = new Group[10]; // array Group[] = масив груп
-	private int count; // amount of groups on faculty = кількість груп на
-						// факультеті
+	private List<Group> faculty = new ArrayList<Group>(); // List Groups =
+	private int maxGroupsFaculty = 10;
+
+	// список груп
 
 	/* constructors = конструктори */
 	public Faculty() {
@@ -29,7 +32,7 @@ public class Faculty implements Serializable {
 	}
 
 	public Faculty(String facultyName, String facultyId, String highSchool,
-			Group[] faculty) {
+			List<Group> faculty) {
 		super();
 		this.facultyName = facultyName;
 		this.facultyId = facultyId;
@@ -57,17 +60,12 @@ public class Faculty implements Serializable {
 	}
 
 	// array Group[] = масив груп
-	public Group[] getFaculty() {
+	public List<Group> getFaculty() {
 		return faculty;
 	}
 
-	public void setFaculty(Group[] faculty) {
+	public void setFaculty(List<Group> faculty) {
 		this.faculty = faculty;
-	}
-
-	// amount of groups on faculty = кількість груп на факультеті
-	public int getCount() {
-		return count;
 	}
 
 	// toString method = метод виводу інформації про екземпляр класу Faculty
@@ -76,9 +74,9 @@ public class Faculty implements Serializable {
 		String resStr = "";
 		int i = 0;
 		for (Group gr : faculty)
-			resStr += "\n" + ++i + ". " + gr;
+			resStr += System.getProperty("line.separator") + ++i + ". " + gr;
 		return "Faculty[" + facultyName + " id:" + facultyId
-				+ "] consists of such " + this.count + " groups:" + resStr;
+				+ "] consists of such " + faculty.size() + " groups:" + resStr;
 	}
 
 	public String toStringGs() {
@@ -86,12 +84,12 @@ public class Faculty implements Serializable {
 		int i = 0, qS = 0;
 		for (Group gr : faculty) {
 			if (gr != null)
-				qS += gr.getCount();
-			resStr += "\n" + ++i + ". "
+				qS += gr.getGroup().size();
+			resStr += System.getProperty("line.separator") + ++i + ". "
 					+ ((gr == null) ? null : gr.toStringNNC());
 		}
 		return "Faculty[" + facultyName + " id:" + facultyId
-				+ "] consists of such " + this.count + " groups of " + qS
+				+ "] consists of such " + faculty.size() + " groups of " + qS
 				+ " students:" + resStr;
 	}
 
@@ -99,9 +97,9 @@ public class Faculty implements Serializable {
 		int qS = 0;
 		for (Group gr : faculty)
 			if (gr != null)
-				qS += gr.getCount();
+				qS += gr.getGroup().size();
 		return "Faculty[" + facultyName + " id:" + facultyId
-				+ ", Number of groups: " + this.count
+				+ ", Number of groups: " + faculty.size()
 				+ ", Number of students: " + qS + "]";
 	}
 
@@ -122,20 +120,15 @@ public class Faculty implements Serializable {
 
 		// search same groupNumber in faculty =
 		// пошук однакового номеру групи на факультеті
-		for (int i = 0; i < faculty.length; i++)
-			if (faculty[i] != null)
-				if (faculty[i].getGroupNumber() == gr.getGroupNumber())
-					throw new MyException(4, id);
+		for (int i = 0; i < faculty.size(); i++)
+			if (faculty.get(i).getGroupNumber() == gr.getGroupNumber())
+				throw new MyException(4, id);
 
 		// search free place on faculty = пошук вільного місця на факультеті
 		boolean add = false;
-		for (int i = 0; i < faculty.length; i++) {
-			if (faculty[i] == null) {
-				faculty[i] = gr;
-				count++;
-				add = true;
-				break;
-			}
+		if (faculty.size() < maxGroupsFaculty) {
+			faculty.add(gr);
+			add = true;
 		}
 		if (!add)
 			throw new MyException(5, id);
@@ -178,21 +171,11 @@ public class Faculty implements Serializable {
 		String id = "(" + facultyName + " id:" + facultyId + ")";
 		if (gr == null)
 			throw new MyException(6, id);
-		for (int i = 0; i < faculty.length; i++) {
-			if (faculty[i] == null)
-				continue;
-
-			// if (faculty[i].equals(fc) {
-			// !!!! methot EQUALS needs to be improved, for future =
-			// метод потребує доопрацювання, на майбутнє
-
-			// currently, identification is only on the groupNumber =
-			// наразі ідентифікація лише по номеру групи
-			if (faculty[i].getGroupNumber() == gr.getGroupNumber()) {
-				faculty[i] = null; // exclude group = видаляємо групу
-				count--; // reduce counter = зменшуємо лічільник
+		for (int i = 0; i < faculty.size(); i++) {
+			if (faculty.get(i).equals(gr)) {
+				faculty.remove(i); // exclude group = видаляємо групу
 				resStr = "the group is EXCUDED from the faculty"
-						+ " = групу ВИКЛЮЧЕНО з факультету";
+					+ " = групу ВИКЛЮЧЕНО з факультету";
 				break;
 			}
 		}

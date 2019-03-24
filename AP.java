@@ -88,29 +88,29 @@ public class AP {
 		return arr;
 	}
 
-	/**
-	 * Bubble sort string array = метод бульбашкового сортування String-масиву
-	 * 
-	 * @param arr
-	 *            <code>String[]</code> array for sorting
-	 * @param az
-	 *            <code>int</code> sort direction (+0=AZ; -0=Z; 0=unsort)
-	 * @return String[] sorted array.
-	 * @author ap
-	 */
-	public static String[] sortArrayString(String[] arr, int az) {
-		boolean isSorted = false;
-		while (!isSorted) {
-			isSorted = true;
-			for (int i = 0; i < arr.length - 1; i++) {
-				if (arr[i].compareToIgnoreCase(arr[i + 1]) * az > 0) {
-					isSorted = false;
-					arr = swapArrElem(arr, i, i + 1);
-				}
-			}
-		}
-		return arr;
-	}
+//	/**
+//	 * Bubble sort string array = метод бульбашкового сортування String-масиву
+//	 * 
+//	 * @param arr
+//	 *            <code>String[]</code> array for sorting
+//	 * @param az
+//	 *            <code>int</code> sort direction (+0=AZ; -0=Z; 0=unsort)
+//	 * @return String[] sorted array.
+//	 * @author ap
+//	 */
+//	public static String[] sortArrayString(String[] arr, int az) {
+//		boolean isSorted = false;
+//		while (!isSorted) {
+//			isSorted = true;
+//			for (int i = 0; i < arr.length - 1; i++) {
+//				if (arr[i].compareToIgnoreCase(arr[i + 1]) * az > 0) {
+//					isSorted = false;
+//					arr = swapArrElem(arr, i, i + 1);
+//				}
+//			}
+//		}
+//		return arr;
+//	}
 
 	/**
 	 * Bubble sort nulls to the end of Student array = метод бульбашкового

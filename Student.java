@@ -11,7 +11,7 @@ import java.io.Serializable;
  3. Реализуйте возможность сортировки по параметру (Фамилия, успеваемость и т. д.).
  */
 
-public class Student extends Human implements Comparable, Serializable {
+public class Student extends Human implements Serializable {
 
 	// protected Human human; // екземпляр класу Human
 	protected int recordNumber; // record number = номер заліковки
@@ -98,54 +98,25 @@ public class Student extends Human implements Comparable, Serializable {
 				+ ") recordNumber-" + recordNumber + "]";
 	}
 
-	// !!!! methot needs to be improved, for future = метод потребує
-	// доопрацювання, на майбутнє
 	/**
 	 * Comparing two instances of a class Student = метод порівняння двох
 	 * екземпляір класу Student
 	 * 
-	 * @param person
+	 * @param student
 	 *            <code>Student</code> instances of a class Student
 	 * @return boolean true-value if equals
 	 * @author ap
 	 */
-	/*
-	 * public boolean equals(Student person) { boolean res = false; if
-	 * (this.secondName.equals(person.getSecondName()) &&
-	 * this.firstName.equals(person.getFirstName()) &&
-	 * this.middleName.equals(person.getMiddleName()) && this.age ==
-	 * person.getAge() && this.sex == person.isSex() &&
-	 * this.highSchool.equals(person.getHighSchool()) && this.yearStudy ==
-	 * person.getYearStudy()) { res = true; } return res; }
-	 */
-
-	// Lesson04
-	// 2. Реализуйте возможность сортировки списка студентов по фамилии.
-	// 3. Реализуйте возможность сортировки по параметру (Фамилия, успеваемость
-	// и т. д.).
-	@Override
-	public int compareTo(Object o) {
-		Student st = (Student) o;
-
-		switch (Group.getSortWay()) {
-		case 1: // secondName-aZ
-			return this.secondName.compareToIgnoreCase(st.getSecondName());
-		case -1: // secondName-Za
-			return -this.secondName.compareToIgnoreCase(st.getSecondName());
-		case 2: // firstName-aZ
-			return this.firstName.compareToIgnoreCase(st.getFirstName());
-		case -2: // firstName-Za
-			return -this.firstName.compareToIgnoreCase(st.getFirstName());
-		case 3: // age-aZ
-			return this.age - st.getAge();
-		case -3: // age-Za
-			return -this.age + st.getAge();
-		case 4: // recordNumber-aZ
-			return this.recordNumber - st.getRecordNumber();
-		case -4: // recordNumber-Za
-			return -this.recordNumber + st.getRecordNumber();
-		default:
-			return 0;
-		}
+	public boolean equals(Student student) {
+		boolean res = false;
+		if (this.secondName.equals(student.getSecondName())
+				&& this.firstName.equals(student.getFirstName())
+				&& this.middleName.equals(student.getMiddleName())
+				&& this.age == student.getAge() && this.sex == student.isSex()
+				&& this.recordNumber == student.getRecordNumber()
+				&& this.highSchool.equals(student.getHighSchool())
+				&& this.yearStudy == student.getYearStudy())
+			res = true;
+		return res;
 	}
 }

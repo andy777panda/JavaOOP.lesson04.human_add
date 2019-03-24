@@ -1,7 +1,7 @@
 package net.ukr.andy777;
 
 import java.io.*;
-import java.util.Arrays;
+import java.util.*;
 
 /*
  Lesson03
@@ -17,12 +17,16 @@ import java.util.Arrays;
  Lesson05
  3. Усовершенствуйте класс, описывающий группу студентов, добавив возможность сохранения группы в файл.
  4. Реализовать обратный процесс. Т.е. считать данные о группе из файла, и на их основе создать объект типа группа.
+
+ Lesson09
+ 2. Модифицируйте класс «Группа» для более удобных методов работы с динамическими массивами.
  */
+
 public class Group implements Reservist, Serializable {
 	private String groupName; // group name = назва групи
 	private String groupNumber; // group number = номер групи
-	private int count; // amount of students in group = кількість студентів в групі
-	private Student[] group = new Student[10]; // array Student[] = масив судентів
+	private List<Student> group = new ArrayList<Student>(); // список судентів
+	private int maxStudentsGroup = 10;
 	private static int sortWay; // way of sorting = шлях сортування
 	// parameter of sorting = параметр сортування
 	private static String[] sortParam = { "0.unsorted ", "1.secondName ",
@@ -37,9 +41,10 @@ public class Group implements Reservist, Serializable {
 		super();
 		this.groupName = groupName;
 		this.groupNumber = groupNumber;
+		group = new ArrayList<Student>(10);
 	}
 
-	public Group(String groupName, String groupNumber, Student[] group) {
+	public Group(String groupName, String groupNumber, List<Student> group) {
 		super();
 		this.groupName = groupName;
 		this.groupNumber = groupNumber;
@@ -67,17 +72,12 @@ public class Group implements Reservist, Serializable {
 	}
 
 	// array of Student[] = масив судентів
-	public Student[] getGroup() {
+	public List<Student> getGroup() {
 		return group;
 	}
 
-	public void setGroup(Student[] group) {
+	public void setGroup(List<Student> group) {
 		this.group = group;
-	}
-
-	// amount of students in group = кількість студентів в групі
-	public int getCount() {
-		return count;
 	}
 
 	// way of sorting = шлях сортування
@@ -104,14 +104,14 @@ public class Group implements Reservist, Serializable {
 		String resStr = "";
 		int i = 0;
 		for (Student st : group)
-			resStr += "\n" + ++i + ". " + st;
+			resStr += System.getProperty("line.separator") + ++i + ". " + st;
 		return "Group [" + groupName + " #" + groupNumber
-				+ "] consists of such " + this.count + " students:" + resStr;
+				+ "] consists of such " + group.size() + " students:" + resStr;
 	}
 
 	public String toStringNNC() {
 		return "Group [" + groupName + " #" + groupNumber
-				+ ", Number of students: " + this.count + "]";
+				+ ", Number of students: " + group.size() + "]";
 	}
 
 	/**
@@ -124,25 +124,24 @@ public class Group implements Reservist, Serializable {
 	 * @return String value.
 	 * @author ap
 	 */
-	public String getStSortGroup(int az) {
-		String[] sts = new String[group.length];
-		String resStr = "";
-		for (int i = 0; i < group.length; i++) {
-			try {
-				sts[i] = group[i].toString();
-			} catch (NullPointerException e) {
-				sts[i] = "";
-			}
-		}
-		sts = AP.sortArrayString(sts, az);
-		for (int i = 0; i < sts.length; i++) {
-			if (sts[i] != "")
-				resStr += "\n" + sts[i];
-		}
-		return "Sorted " + AP.direction(az) + "\t Group [" + groupName + " #"
-				+ groupNumber + "] consists of such students:" + resStr;
-	}
-
+	// public String getStSortGroup(int az) {
+	// String[] sts = new String[group.size()];
+	// String resStr = "";
+	// for (int i = 0; i < group.size(); i++) {
+	// try {
+	// sts[i] = group.get(i).toString();
+	// } catch (NullPointerException e) {
+	// sts[i] = "";
+	// }
+	// }
+	// sts = AP.sortArrayString(sts, az);
+	// for (int i = 0; i < sts.length; i++) {
+	// if (sts[i] != "")
+	// resStr += System.getProperty("line.separator") + sts[i];
+	// }
+	// return "Sorted " + AP.direction(az) + "\t Group [" + groupName + " #"
+	// + groupNumber + "] consists of such students:" + resStr;
+	// }
 	/**
 	 * Get sorted elemets of group (array of Students) = метод отримання
 	 * відсортованих елементів групи (масиву студентів)
@@ -154,20 +153,10 @@ public class Group implements Reservist, Serializable {
 	 */
 	public Group getSortGroup(int sortWay) {
 		Group.sortWay = sortWay;
-
-		int jdk = AP.inputIntegerDialog(1, 2,
-				"(1=sortByJDK1.6;   2=sortByJDK1.8)");
-		if (jdk == 1) {
-			AP.sortArrayStudentNulls(group);
-			try {
-				Arrays.sort(group, 0, count);
-			} catch (NullPointerException e) {
-				System.out.println(e);
-			}
-		}
-		if (jdk == 2) {
-			// jdk1.8
-			// Arrays.sort(group, Comparator.nullsLast(Student::compareTo));
+		try {
+			Collections.sort(group, new StudentComparator());
+		} catch (NullPointerException e) {
+			System.out.println(e);
 		}
 		return this;
 	}
@@ -188,24 +177,16 @@ public class Group implements Reservist, Serializable {
 
 		// search same recordNumber in group =
 		// пошук однакового номеру заліковки в групі
-		for (int i = 0; i < group.length; i++) {
-			if (group[i] != null) {
-				if (group[i].getRecordNumber() == st.getRecordNumber()) {
-					throw new MyException(3, id);
-				}
-			}
-		}
+		for (int i = 0; i < group.size(); i++)
+			if (group.get(i).getRecordNumber() == st.getRecordNumber())
+				throw new MyException(3, id);
 
 		// search free place in group =
 		// пошук вільного місця в групі
 		boolean add = false;
-		for (int i = 0; i < group.length; i++) {
-			if (group[i] == null) {
-				group[i] = st;
-				count++;
-				add = true;
-				break;
-			}
+		if (group.size() < maxStudentsGroup) {
+			group.add(st);
+			add = true;
 		}
 		if (!add)
 			throw new MyException(1, id);
@@ -248,19 +229,9 @@ public class Group implements Reservist, Serializable {
 		String id = "(" + groupName + " #" + groupNumber + ")";
 		if (st == null)
 			throw new MyException(2, id);
-		for (int i = 0; i < group.length; i++) {
-			if (group[i] == null)
-				continue;
-
-			// if (group[i].equals(st)) {
-			// !!!! methot EQUALS needs to be improved, for future =
-			// метод потребує доопрацювання, на майбутнє
-
-			// currently, identification is only on the recordNumber =
-			// наразі ідентифікація лише по номеру заліковки
-			if (group[i].getRecordNumber() == st.getRecordNumber()) {
-				group[i] = null; // exclude student = видаляємо студента
-				count--; // reduce counter = зменшуємо лічільник
+		for (int i = 0; i < group.size(); i++) {
+			if (group.get(i).equals(st)) {
+				group.remove(i); // exclude student = видаляємо студента
 				resStr = "the student is EXCUDED from the group"
 						+ " = студента ВИКЛЮЧЕНО з групи ";
 				break;
@@ -295,25 +266,22 @@ public class Group implements Reservist, Serializable {
 	 * @return count of found surnames
 	 * @author ap
 	 */
-	public Student[] findSecondName(String sName) {
-		Student[] res = new Student[0];// result array == масив результатів
+	public List<Student> findSecondName(String sName) {
+		List<Student> res = new ArrayList<Student>();// result array == масив
+		// результатів
 		String id = "(" + groupName + " #" + groupNumber + ")";
 		System.out.print("Find student in group = пошук студента в групі " + id
 				+ ": " + sName + " ==>> ");
 		String resStr = "";
-		int q = 0; // finds counter = лічильник знахідок
-		for (int i = 0; i < group.length; i++) {
-			if (group[i] == null)
-				continue;
-			if (group[i].getSecondName().equalsIgnoreCase(sName)) {
+		for (int i = 0; i < group.size(); i++) {
+			if (group.get(i).getSecondName().equalsIgnoreCase(sName)) {
 				// розширюємо масив знайдених студентів
-				res = AP.resize(res, 1);
-				// ініціалізуємо знайденого студента в масиві результатів
-				res[q++] = group[i];
-				resStr += "\n\t\t" + (i + 1) + ". " + group[i].toString();
+				res.add(group.get(i));
+				resStr += "\n\t\t" + (i + 1) + ". " + group.get(i).toString();
 			}
 		}
-		resStr = "\t found students = знайдено студентів: " + q + resStr;
+		resStr = "\t found students = знайдено студентів: " + res.size()
+				+ resStr;
 		System.out.println(resStr);
 		return res;
 	}
@@ -328,16 +296,12 @@ public class Group implements Reservist, Serializable {
 	 * @return array of Students
 	 * @author ap
 	 */
-	public Student[] getReservistList() {
-		Student[] res = new Student[0];// result array == масив результатів
-		for (Student st : this.group) {
-			if (st != null) {
-				if (st.isSex() && st.getAge() > RESERVIST_AGE) {
-					res = AP.resize(res, 1);
-					res[res.length - 1] = st;
-				}
-			}
-		}
+	public List<Student> getReservistList() {
+		// result list == список результатів
+		List<Student> res = new ArrayList<Student>();
+		for (Student st : this.group)
+			if (st.isSex() && st.getAge() > RESERVIST_AGE)
+				res.add(st);
 		return res;
 	}
 
@@ -356,19 +320,18 @@ public class Group implements Reservist, Serializable {
 		// get Group by String = отримання Групи в Строковому виді
 		String resStr = "";
 		resStr = groupName + "\t" + groupNumber;
-		resStr += "\n" + "# order" + "\t" + "SecondName" + "\t" + "FirstName"
-				+ "\t" + "MiddleName" + "\t" + "Age" + "\t" + "Sex" + "\t"
-				+ "# Record" + "\t" + "HighSchool" + "\t" + "YearStudy";
+		resStr += System.getProperty("line.separator") + "# order" + "\t"
+				+ "SecondName" + "\t" + "FirstName" + "\t" + "MiddleName"
+				+ "\t" + "Age" + "\t" + "Sex" + "\t" + "# Record" + "\t"
+				+ "HighSchool" + "\t" + "YearStudy";
 		int i = 0;
 		for (Student st : group) {
-			if (st == null)
-				++i;
-			else
-				resStr += "\n" + ++i + "\t" + st.getSecondName() + "\t"
-						+ st.getFirstName() + "\t" + st.getMiddleName() + "\t"
-						+ st.getAge() + "\t" + (st.isSex() ? "male" : "female")
-						+ "\t" + st.getRecordNumber() + "\t"
-						+ st.getHighSchool() + "\t" + st.getYearStudy();
+			resStr += System.getProperty("line.separator") + ++i + "\t"
+					+ st.getSecondName() + "\t" + st.getFirstName() + "\t"
+					+ st.getMiddleName() + "\t" + st.getAge() + "\t"
+					+ (st.isSex() ? "male" : "female") + "\t"
+					+ st.getRecordNumber() + "\t" + st.getHighSchool() + "\t"
+					+ st.getYearStudy();
 		}
 
 		// save Group to file = запис групи до файлу
@@ -418,12 +381,11 @@ public class Group implements Reservist, Serializable {
 		if (wtf.length == 2 + q)
 			return this;
 		for (int i = 1; i < (wtf.length - 2) / q; i++) {
-			this.group[Integer.parseInt(wtf[i * q + 2 + 0]) - 1] = new Student(
-					wtf[i * q + 2 + 1], wtf[i * q + 2 + 2], wtf[i * q + 2 + 3],
-					Integer.parseInt(wtf[i * q + 2 + 4]), ((wtf[i * q + 2 + 5]
-							.equals("male")) ? true : false), Integer
-							.parseInt(wtf[i * q + 2 + 6]), wtf[i * q + 2 + 7],
-					Integer.parseInt(wtf[i * q + 2 + 8]));
+			this.group.add(new Student(wtf[i * q + 2 + 1], wtf[i * q + 2 + 2],
+					wtf[i * q + 2 + 3], Integer.parseInt(wtf[i * q + 2 + 4]),
+					((wtf[i * q + 2 + 5].equals("male")) ? true : false),
+					Integer.parseInt(wtf[i * q + 2 + 6]), wtf[i * q + 2 + 7],
+					Integer.parseInt(wtf[i * q + 2 + 8])));
 		}
 		return this;
 	}
