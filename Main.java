@@ -26,6 +26,8 @@ import java.util.*;
  (возможность записи и чтения базы из файла по запросу пользователя).
  Lesson09
  2. Модифицируйте класс «Группа» для более удобных методов работы с динамическими массивами.
+ Lesson09.add
+ 1. Напишите методы, которые позволят выделить из группы студентов тех, у кого фамилия начинается с определенной буквы.
  */
 
 public class Main {
@@ -33,46 +35,54 @@ public class Main {
 
 		Group gr1 = new Group("Group1", "123/45");
 
-		System.out.println("== наповнення групи вручну");
-		gr1 = manualInputStudents(gr1);
+//		System.out.println("== наповнення групи вручну");
+//		gr1 = manualInputStudents(gr1);
 
 		System.out.println("== автоматичне випадкове наповнення групи");
 		gr1 = autoInputStudents(gr1);
 
-		System.out.println("== автоматичне виключення студентів з групи");
-		gr1 = autoRemoveStudents(gr1);
+		// з завдання Lesson09add
+		System.out.println(gr1.getSortGroup(1) + System.getProperty("line.separator"));
+		System.out.println("\n===- студенти групи, чиє прізвище починається з визначеної літери");
+		gr1.findSecondNameFirstLetter('А');
+		gr1.findSecondNameFirstLetter('Б');
+		gr1.findSecondNameFirstLetter('В');
+		gr1.findSecondNameFirstLetter('Д');
 
-		System.out.println("==== запис/читання в/з файлів group.csv");
-		saveReadGroupFile(gr1);
-
-		System.out.println("== пошук студента за прізвищем");
-		findStudent(gr1, AP.setSecondNameRnd(AP.rndBoolean()));
-
-		System.out.println("== сортування за введеним параметром");
-		gr1 = sortStudents(gr1);
-
-		System.out.println("ReservistList:");
-		reservists(gr1);
-
-		// з попереднього завдання Lesson08
-		Faculty fc1 = new Faculty("IT-faculty", "fc.001");
-		System.out.println("==== наповнення факультету групами");
-		fc1 = autoInputGroups(fc1);
-
-		System.out.println("=== видалення випадкової групи з факультету");
-		fc1 = autoRemoveGroup(fc1);
-
-		System.out.println("=== serializable-запис факультету до файлу");
-		fc1.saveFacultyToFile(fc1.getFacultyName());
-
-		System.out.println("\n"
-				+ "=== формування факультету з зовнішного serializable-файлу");
-		Faculty fc2 = new Faculty().readFileToFaculty(fc1.getFacultyName());
-
-		System.out
-				.println("\n=== перевірка зчитаного факультету з прочитаного "
-						+ "serializable-файлу");
-		System.out.println(fc2.toStringGs() + "\n");
+//		System.out.println("== автоматичне виключення студентів з групи");
+//		gr1 = autoRemoveStudents(gr1);
+//
+//		System.out.println("==== запис/читання в/з файлів group.csv");
+//		saveReadGroupFile(gr1);
+//
+//		System.out.println("== пошук студента за прізвищем");
+//		findStudent(gr1, AP.setSecondNameRnd(AP.rndBoolean()));
+//
+//		System.out.println("== сортування за введеним параметром");
+//		gr1 = sortStudents(gr1);
+//
+//		System.out.println("ReservistList:");
+//		reservists(gr1);
+//
+//		// з попереднього завдання Lesson08
+//		Faculty fc1 = new Faculty("IT-faculty", "fc.001");
+//		System.out.println("==== наповнення факультету групами");
+//		fc1 = autoInputGroups(fc1);
+//
+//		System.out.println("=== видалення випадкової групи з факультету");
+//		fc1 = autoRemoveGroup(fc1);
+//
+//		System.out.println("=== serializable-запис факультету до файлу");
+//		fc1.saveFacultyToFile(fc1.getFacultyName());
+//
+//		System.out.println("\n"
+//				+ "=== формування факультету з зовнішного serializable-файлу");
+//		Faculty fc2 = new Faculty().readFileToFaculty(fc1.getFacultyName());
+//
+//		System.out
+//				.println("\n=== перевірка зчитаного факультету з прочитаного "
+//						+ "serializable-файлу");
+//		System.out.println(fc2.toStringGs() + "\n");
 
 	}
 
@@ -99,7 +109,7 @@ public class Main {
 	private static Group autoRemoveStudents(Group gr) {
 		// випадкова особа з групи з випадковим номером заліковки
 		gr.tcRemoveStudentFromGroup(gr.getGroup().get(
-				AP.rndInteger(0, gr.getGroup().size())));
+				AP.rndInteger(0, gr.getGroup().size()-1)));
 		// випадкова особа
 		gr.tcRemoveStudentFromGroup(AP.rndStudent(17, 23, true, 20));
 		// null-особа
@@ -199,7 +209,7 @@ public class Main {
 	// факультету
 	private static Faculty autoRemoveGroup(Faculty fc) {
 		fc.tcRemoveGroupFromFaculty(fc.getFaculty().get(
-				AP.rndInteger(0, fc.getFaculty().size())));
+				AP.rndInteger(0, fc.getFaculty().size()-1)));
 		System.out.println(fc.toStringGs()
 				+ System.getProperty("line.separator"));
 		return fc;

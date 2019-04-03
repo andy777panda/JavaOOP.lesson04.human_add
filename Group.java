@@ -2,6 +2,7 @@ package net.ukr.andy777;
 
 import java.io.*;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /*
  Lesson03
@@ -20,6 +21,9 @@ import java.util.*;
 
  Lesson09
  2. Модифицируйте класс «Группа» для более удобных методов работы с динамическими массивами.
+
+ Lesson09.add
+ 1. Напишите методы, которые позволят выделить из группы студентов тех, у кого фамилия начинается с определенной буквы.
  */
 
 public class Group implements Reservist, Serializable {
@@ -388,5 +392,15 @@ public class Group implements Reservist, Serializable {
 					Integer.parseInt(wtf[i * q + 2 + 8])));
 		}
 		return this;
+	}
+
+	// метод виділяє з групи таких студентів, у кого прізвище починається з
+	// визначеної літери
+	public List<Student> findSecondNameFirstLetter(char chr) {
+		List<Student> res = group.stream()
+				.filter(n -> n.getSecondName().charAt(0) == chr)
+				.collect(Collectors.toCollection(ArrayList::new));
+		System.out.println("\n== студенти на літеру " +chr+ "\n" + res + "\n");
+		return res;
 	}
 }
